@@ -1,4 +1,4 @@
-import pyxel  # type: ignore
+import pyxel
 
 class Mario:
     def __init__(self, x, y):
@@ -31,11 +31,11 @@ class Mario:
     def update(self, blocks):
         """Met à jour la position et l'état de Mario."""
         # Logique de saut
-        if pyxel.btnp(pyxel.KEY_UP) and not self.is_jumping:
-            self.is_jumping = True
+        if pyxel.btnp(pyxel.KEY_UP) and self.is_jumping == 0:
+            self.is_jumping = 1
             self.vertical_speed = -self.jump_strength
 
-        if self.is_jumping:
+        if self.is_jumping == 1:
             self.vertical_speed += self.gravity
             self.y += self.vertical_speed
 
@@ -43,10 +43,10 @@ class Mario:
             if self.check_collisions(self.x, self.y, blocks):
                 self.y -= self.vertical_speed
                 self.vertical_speed = 0
-                self.is_jumping = False
+                self.is_jumping = 0
         else:
             # Gravité
-            if not self.check_collisions(self.x, self.y + 1, blocks):
+            if not self.check_collisions(self.x, self.y + self.vertical_speed + self.gravity, blocks):
                 self.vertical_speed += self.gravity
                 self.y += self.vertical_speed
             else:
@@ -83,14 +83,14 @@ class Game:
     def __init__(self):
         # Initialise la fenêtre de jeu
         pyxel.init(220, 160, title="Mario Bros")
-        pyxel.image(0).load(0, 0, 'Img/Sprite/marios.png')  # Charge les sprites de Mario
+        pyxel.image(0).load(0, 0, 'Img/marios.png')  # Charge les sprites de Mario
 
         # Initialise les attributs du jeu
         self.floor_y = pyxel.height * 2 / 3  # Position verticale du sol
         self.mario = Mario(0, self.floor_y - 16)  # Crée une instance de Mario
         self.blocks = [
             (0, self.floor_y, pyxel.width, pyxel.height / 3, 4),  # Sol
-            (100, self.floor_y - 20, 60, 20, 10)  # Bloc exemple
+            (100, self.floor_y - 55, 60, 10, 10)  # Bloc exemple
         ]
         pyxel.run(self.update, self.draw)  # Lance la boucle de jeu
 
