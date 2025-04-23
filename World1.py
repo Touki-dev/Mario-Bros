@@ -42,8 +42,8 @@ class World1:
 
     def draw(self):
         self.refresh()
-        for b in self.blocks:
-            pyxel.rect(b["x"], b["y"], b["w"], b["h"], b["col"])
         
         self.mario.draw()
         self.pipe1.draw()
+
+        return self.blocks

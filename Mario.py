@@ -27,7 +27,8 @@ class Mario:
                 collisions.append(b)
                 if b["class"]:
                     if b["class"] == 'Pipe':
-                        if pyxel.floor(y + self.height) == b["y"] and b["x"] <= x <= x + self.width <= b["x"] + b["w"]:
+                        if (pyxel.floor(y + self.height) == b["y"] or b["y"]+b["h"]-5 <= y <= b["y"]+b["h"]) \
+                            and b["x"] <= x <= x + self.width <= b["x"] + b["w"]:
                             self.change_world = b["destination"]
                             self.x, self.y = self.spawnpoint
                             print(b["destination"])

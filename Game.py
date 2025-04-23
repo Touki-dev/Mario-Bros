@@ -21,14 +21,16 @@ class Game:
     def update(self):
         """Met à jour l'état du jeu."""
         self.pos_camera, change_world = self.world_active.update()
-        print(change_world)
         if change_world != False:
             self.world_active = self.worlds[change_world]
-            
+
         pyxel.camera(self.pos_camera[0], self.pos_camera[1])
 
     def draw(self):
         """Dessine tous les éléments du jeu à l'écran."""
-        self.world_active.draw()
+        self.blocks = self.world_active.draw()
+        for b in self.blocks:
+            if b["col"] != None:
+                pyxel.rect(b["x"], b["y"], b["w"], b["h"], b["col"])
 
 Game()

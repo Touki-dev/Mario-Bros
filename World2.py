@@ -8,7 +8,8 @@ class World2:
         self.floor_y = pyxel.height * 3 / 4  # Position verticale du sol
         self.mario = Mario((pyxel.width / 2 - 18/2, self.floor_y - 16))  # Crée une instance de Mario
         self.background = 12
-        self.pipe1 = Pipe(170, self.floor_y - 64, 'world1', self.background)
+        self.pipe1 = Pipe(0, self.floor_y - 50, False, self.background, rotate=90)
+        self.pipe2 = Pipe(170, self.floor_y - 128, 'world1', self.background, rotate=180)
         self.blocks = [{
             "x": -pyxel.width * 10,
             "y": self.floor_y,
@@ -26,7 +27,8 @@ class World2:
             "col": 10,
             "class": None,
             "arg1": None
-        }, self.pipe1.hit_box]
+        }, self.pipe1.hit_box, self.pipe2.hit_box
+        ]
 
     def refresh(self):
         """Rafraîchit l'écran en dessinant l'arrière-plan."""
@@ -39,8 +41,9 @@ class World2:
 
     def draw(self):
         self.refresh()
-        for b in self.blocks:
-            pyxel.rect(b["x"], b["y"], b["w"], b["h"], b["col"])
         
         self.mario.draw()
         self.pipe1.draw()
+        self.pipe2.draw()
+
+        return self.blocks
