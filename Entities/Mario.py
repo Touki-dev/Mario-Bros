@@ -1,4 +1,5 @@
 import pyxel
+from Constantes import GRAVITY
 
 class Mario:
     def __init__(self, spawnpoint):
@@ -14,7 +15,6 @@ class Mario:
         self.vertical_speed = 0  # Vitesse verticale de Mario
         self.is_jumping = False  # Indique si Mario est en train de sauter
         self.jump_strength = 8  # Force du saut
-        self.gravity = 0.5  # Gravité appliquée à Mario
         self.width = 18  # Largeur de Mario
         self.height = 16  # Hauteur de Mario
 
@@ -56,7 +56,7 @@ class Mario:
             self.vertical_speed = -self.jump_strength
 
         if self.is_jumping == 1:
-            self.vertical_speed += self.gravity
+            self.vertical_speed += GRAVITY
             self.y += self.vertical_speed
 
             # Vérifie les collisions avec les blocs
@@ -66,8 +66,8 @@ class Mario:
                 self.is_jumping = 0
         else:
             # Gravité
-            if not self.check_collisions(self.x, self.y + self.vertical_speed + self.gravity, blocks):
-                self.vertical_speed += self.gravity
+            if not self.check_collisions(self.x, self.y + self.vertical_speed + GRAVITY, blocks):
+                self.vertical_speed += GRAVITY
                 self.y += self.vertical_speed
             else:
                 self.vertical_speed = 0

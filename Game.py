@@ -1,6 +1,6 @@
 import pyxel
-from World1 import *
-from World2 import *
+from Worlds.World1 import *
+from Worlds.World2 import *
 
 class Game:
     def __init__(self):
