@@ -1,10 +1,11 @@
 import pyxel
 
 class Mario:
-    def __init__(self, x, y):
+    def __init__(self, spawnpoint):
+        pyxel.images[0].load(0, 0, 'Img/marios.png')
         # Initialise la position de Mario
-        self.x = x
-        self.y = y
+        self.spawnpoint = spawnpoint
+        self.x, self.y = self.spawnpoint
         # Initialise les attributs de Mario
         self.frame = 0  # Frame actuelle de l'animation
         self.direction = 1  # Direction de Mario (1 pour droite, -1 pour gauche)
@@ -21,10 +22,15 @@ class Mario:
         """Vérifie les collisions entre Mario et les blocs."""
         collisions = []
         for b in blocks:
-            bx, by, bw, bh, _ = b
             # Vérifie si Mario entre en collision avec un bloc
-            if not (bx + bw <= x or bx >= x + self.width or by + bh <= y or by >= y + self.height):
+            if not (b["x"] + b["w"] <= x or b["x"] >= x + self.width or b["y"] + b["h"] <= y or b["y"] >= y + self.height):
                 collisions.append(b)
+                if b["class"]:
+                    if b["class"] == 'Pipe':
+                        if pyxel.floor(y + self.height) == b["y"] and b["x"] <= x <= x + self.width <= b["x"] + b["w"]:
+                            self.change_world = b["destination"]
+                            self.x, self.y = self.spawnpoint
+                            print(b["destination"])
         return collisions
 
     def move_camera(self, pos_camera):
@@ -42,6 +48,7 @@ class Mario:
 
     def update(self, blocks):
         """Met à jour la position et l'état de Mario."""
+        self.change_world = False
         # Logique de saut
         if pyxel.btnp(pyxel.KEY_UP) and self.is_jumping == 0:
             self.is_jumping = 1
@@ -88,7 +95,8 @@ class Mario:
             self.frame = 4
             self.frame_stop_count = pyxel.frame_count
             self.speed = 2
-            print(self.speed)
+
+        return self.change_world
 
     def draw(self):
         """Dessine Mario à l'écran."""
