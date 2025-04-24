@@ -39,7 +39,7 @@ class Game:
             for b in self.blocks:
                 if b["col"] != None:
                     pyxel.rect(b["x"], b["y"], b["w"], b["h"], b["col"])
-            pyxel.text(self.pos_camera[0] + 10, self.pos_camera[1] + 10, f"{self.mario_health} vies", 0)
+            pyxel.text(self.pos_camera[0] + 10, self.pos_camera[1] + 10, f"{self.mario_health} vie{"s" if self.mario_health > 1 else ""}", 0)
         else:
             pyxel.cls(0)
             pyxel.camera()

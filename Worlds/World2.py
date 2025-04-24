@@ -36,8 +36,8 @@ class World2:
     
     def update(self):
         """Met à jour l'état du jeu."""
-        change_world = self.mario.update(self.blocks)
-        return self.mario.move_camera(self.pos_camera), change_world
+        change_world, damage = self.mario.update(self.blocks, [])
+        return self.mario.move_camera(self.pos_camera), change_world, damage
 
     def draw(self):
         self.refresh()
