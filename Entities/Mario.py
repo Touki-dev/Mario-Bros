@@ -15,8 +15,10 @@ class Mario:
         self.vertical_speed = 0  # Vitesse verticale de Mario
         self.is_jumping = False  # Indique si Mario est en train de sauter
         self.jump_strength = 8  # Force du saut
-        self.width = 18  # Largeur de Mario
+        self.width = 16  # Largeur de Mario
         self.height = 16  # Hauteur de Mario
+        self.invincibility = 0
+        self.show = True
 
     def check_collisions(self, x, y, blocks):
         """Vérifie les collisions entre Mario et les blocs."""
@@ -47,9 +49,18 @@ class Mario:
             
         return pos_camera
 
-    def update(self, blocks):
+    def collision_mob(self, mobs):
+        for m in mobs:
+            if not (m["x"] + m["w"] <= self.x or m["x"] >= self.x + self.width or m["y"] + m["h"] <= self.y or m["y"] >= self.y + self.height):
+                print(not self.invincibility)
+                if not self.invincibility:
+                    self.damage = 1
+                    self.invincibility = 31
+
+    def update(self, blocks, mobs):
         """Met à jour la position et l'état de Mario."""
         self.change_world = False
+        self.damage = 0
         # Logique de saut
         if pyxel.btnp(pyxel.KEY_UP) and self.is_jumping == 0:
             self.is_jumping = 1
@@ -96,9 +107,16 @@ class Mario:
             self.frame = 4
             self.frame_stop_count = pyxel.frame_count
             self.speed = 2
-
-        return self.change_world
+        
+        self.collision_mob(mobs)
+        if self.invincibility:
+            if (self.invincibility-1) % 6 == 0:
+                print(self.invincibility)
+                self.show = not self.show
+            self.invincibility -= 1
+        return self.change_world, self.damage
 
     def draw(self):
         """Dessine Mario à l'écran."""
-        pyxel.blt(self.x, self.y, 0, self.frame * 18, 0, 18 * self.direction, 16, 12)
+        if self.show:
+            pyxel.blt(self.x, self.y, 0, self.frame * (self.width + 2), 0, self.width * self.direction, 16, 12)

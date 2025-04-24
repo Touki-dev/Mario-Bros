@@ -1,6 +1,7 @@
 import pyxel
 from Entities.Mario import *
 from Entities.Pipe import *
+from Entities.Coopa import *
 
 class World1:
     def __init__(self):
@@ -28,6 +29,7 @@ class World1:
             "arg1": None
         }, self.pipe1.hit_box]
 
+        self.coopa = Coopa((self.blocks[1]["x"], self.blocks[1]["y"] - 24), [1])
 
     def refresh(self):
         """Rafraîchit l'écran en dessinant l'arrière-plan."""
@@ -37,13 +39,15 @@ class World1:
     
     def update(self):
         """Met à jour l'état du jeu."""
-        change_world = self.mario.update(self.blocks)
-        return self.mario.move_camera(self.pos_camera), change_world
+        coopa_hit_box = self.coopa.update(self.blocks)
+        change_world, damage = self.mario.update(self.blocks, [coopa_hit_box])
+        return self.mario.move_camera(self.pos_camera), change_world, damage
 
     def draw(self):
         self.refresh()
         
         self.mario.draw()
+        self.coopa.draw()
         self.pipe1.draw()
 
         return self.blocks
