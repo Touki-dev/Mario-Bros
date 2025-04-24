@@ -39,8 +39,8 @@ class World1:
     
     def update(self):
         """Met à jour l'état du jeu."""
-        coopa_hit_box = self.coopa.update(self.blocks)
-        change_world, damage = self.mario.update(self.blocks, [coopa_hit_box])
+        self.coopa.update(self.blocks)
+        change_world, damage = self.mario.update(self.blocks, [self.coopa])
         return self.mario.move_camera(self.pos_camera), change_world, damage
 
     def draw(self):

@@ -48,12 +48,31 @@ class Mario:
             
         return pos_camera
 
+    def jump(self, power):
+        self.is_jumping = 1
+        self.vertical_speed = -self.jump_strength * power
+
     def collision_mob(self, mobs):
         for m in mobs:
-            if not (m["x"] + m["w"] <= self.x or m["x"] >= self.x + self.width or m["y"] + m["h"] <= self.y or m["y"] >= self.y + self.height):
-                if not self.invincibility:
-                    self.damage = 1
-                    self.invincibility = 31
+            if not (m.x + m.width <= self.x or m.x >= self.x + self.width or m.y + m.height <= self.y or m.y >= self.y + self.height):
+                if not m.carapace:
+                    if m.y - m.height/2 >= self.y:
+                        m.to_carapace()
+                        self.jump(0.6)
+                    else:
+                        if not self.invincibility:
+                            self.damage = 1
+                            self.invincibility = 31
+                else:
+                    if self.x + self.width < m.x + m.width/2:
+                        m.shot = True
+                        m.dir = 1
+                    elif m.x + m.width/2 < self.x:
+                        m.shot = True
+                        m.dir = -1
+                    else:
+                        self.jump(0.6)
+                        m.shot = False
 
     def update(self, blocks, mobs):
         """Met à jour la position et l'état de Mario."""
@@ -61,8 +80,7 @@ class Mario:
         self.damage = 0
         # Logique de saut
         if pyxel.btnp(pyxel.KEY_UP) and self.is_jumping == 0:
-            self.is_jumping = 1
-            self.vertical_speed = -self.jump_strength
+            self.jump(1)
 
         if self.is_jumping == 1:
             self.vertical_speed += GRAVITY
