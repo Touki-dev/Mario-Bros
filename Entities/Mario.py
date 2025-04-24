@@ -33,7 +33,6 @@ class Mario:
                             and b["x"] <= x <= x + self.width <= b["x"] + b["w"]:
                             self.change_world = b["destination"]
                             self.x, self.y = self.spawnpoint
-                            print(b["destination"])
         return collisions
 
     def move_camera(self, pos_camera):
@@ -52,7 +51,6 @@ class Mario:
     def collision_mob(self, mobs):
         for m in mobs:
             if not (m["x"] + m["w"] <= self.x or m["x"] >= self.x + self.width or m["y"] + m["h"] <= self.y or m["y"] >= self.y + self.height):
-                print(not self.invincibility)
                 if not self.invincibility:
                     self.damage = 1
                     self.invincibility = 31
@@ -111,7 +109,6 @@ class Mario:
         self.collision_mob(mobs)
         if self.invincibility:
             if (self.invincibility-1) % 6 == 0:
-                print(self.invincibility)
                 self.show = not self.show
             self.invincibility -= 1
         return self.change_world, self.damage
